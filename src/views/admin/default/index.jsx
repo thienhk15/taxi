@@ -1,10 +1,6 @@
 import {
-  Avatar,
   Box,
-  Flex,
-  FormLabel,
   Icon,
-  Select,
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -19,46 +15,53 @@ import { ADMIN_API } from "../../../const";
 import axios from "../../../config/axiosConfig";
 
 export default function UserReports() {
-  // const [bookings, setBookings] = useState([]);
+  let isMounted = true;
   const [revenueOfThisMonth, setRevenueOfThisMonth] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [pieChartData, setPieChartData] = useState([94, 6, 0]);
+  const [pieChartData, setPieChartData] = useState([20, 20, 60]);
   const [bar, setBar] = useState([
     {
-      name: "A",
-      data: [222139, 112456, 101462, 24677, 102997, 259048, 103019, 228890, 117044],
+      name: "revenue",
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     },]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const booking_response = await axios.get(ADMIN_API + "/getAllBookingRequest");
-        const revenue_response = await axios.get(ADMIN_API + "/getRevenue");
-        // const allBookings = booking_response.data;
-        const revenue = revenue_response.data;
-        console.log("revenue")
-        console.log(revenue);
-
-        // setBookings(allBookings);
-
-        setRevenueOfThisMonth(revenue.total_revenue_thisMonth);
-        setTotalRevenue(revenue.total_revenue);
-        let incompleted = 100 - revenue.completed;
-        incompleted = parseFloat(incompleted.toFixed(2));
-        let pie = [revenue.completed, incompleted, 0];
-        console.log("pie m");
-        console.log(pieChartData);
-        setPieChartData(pie);
-        
-        console.log("cccccccccccc");
-        console.log(bar);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const revenue_response = await axios.get(ADMIN_API + "/getRevenue");
+          const revenue = revenue_response.data;
+          console.log(revenue)
+          let incompleted = 100 - revenue.completed;
+          incompleted = parseFloat(incompleted.toFixed(2));
+          setRevenueOfThisMonth(revenue.total_revenue_thisMonth);
+          setTotalRevenue(revenue.total_revenue);
+  
+          // Kiểm tra xem component có unmount chưa trước khi cập nhật state
+          console.log(isMounted)
+          if (isMounted) {
+            const pieData = [revenue.completed, incompleted, 0];
+            setPieChartData(pieData); //gán ở đây 
+            setBar([
+              {
+                name: "revenue",
+                data: revenue.revenue,
+              },
+              
+            ])
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+  
+      // Gọi fetchData trong useEffect
+      fetchData();
+  
+      // Trong hàm cleanup, đặt isMounted thành false khi component unmount
+      return () => {
+        isMounted = false;
+      };
+    });
 
   const brandColor = useColorModeValue("brand.500", "white");
   const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
@@ -104,7 +107,7 @@ export default function UserReports() {
       </SimpleGrid>
       <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
         <SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px">
-          <PieCard pieChartData={pieChartData} />
+          <PieCard pieChartData={pieChartData} /> 
         </SimpleGrid>
       </SimpleGrid>
     </Box>

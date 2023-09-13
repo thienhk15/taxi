@@ -12,7 +12,6 @@ import {
 
 // Admin Imports
 import MainDashboard from "views/admin/default";
-import Profile from "views/admin/profile";
 import BookingManager from "views/admin/booking";
 
 // Auth Imports

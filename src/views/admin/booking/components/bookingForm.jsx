@@ -55,20 +55,22 @@ function BookingForm({ onBookingSubmit }) {
       bookingRequest.price = 0;
       bookingRequest.distance = 0;
       bookingRequest.duration = 0;
+      
 
       const response = await axios.post(
         ADMIN_API + "/createBookingRequest",
         bookingRequest
       );
-      console.log("Kết quả từ API:", response.data);
-      if (onBookingSubmit) {
-        onBookingSubmit();
-      }
-
+      console.log("Kết quả từ API:", response);
+      // if (onBookingSubmit) {
+      //   console.log("submited")
+      //   onBookingSubmit();
+      // }
+      
       // Reset form về giá trị mặc định sau khi đặt xe thành công
       setBookingData({
         customer_name: "",
-        phone: "",
+        phone: "+84 ",
         pickup_address: "",
         dropoff_address: "",
         car_type: "BIKE",
@@ -81,7 +83,7 @@ function BookingForm({ onBookingSubmit }) {
       console.log("Lỗi khi gọi API:", error);
 
       // Hiển thị thông báo hoặc thực hiện hành động khác sau khi xảy ra lỗi
-      alert("Đặt xe thành công!");
+      alert("bugs!");
     }
   };
 

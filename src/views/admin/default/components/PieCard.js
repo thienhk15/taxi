@@ -5,16 +5,20 @@ import Card from "components/card/Card.js";
 import PieChart from "components/charts/PieChart";
 import { pieChartOptions } from "variables/charts";
 import { VSeparator } from "components/separator/Separator";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Conversion(props) {
   const {
     pieChartData, // Truyền dữ liệu từ caller component
     ...rest
   } = props;
+  const [chartData, setChartData] = useState(pieChartData);
+  useEffect(() => {
+    setChartData(pieChartData);
+  }, [pieChartData]);
   console.log("piechartdata");
+
   console.log(pieChartData);
-  const pie = [pieChartData[0], pieChartData[1], pieChartData[2]];
 
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
@@ -40,7 +44,7 @@ export default function Conversion(props) {
       <PieChart
         h="100%"
         w="100%"
-        chartData={pie}
+        chartData={chartData}
         chartOptions={pieChartOptions}
       />
       <Card

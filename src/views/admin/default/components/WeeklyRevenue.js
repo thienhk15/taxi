@@ -10,7 +10,7 @@ import {
 import Card from "components/card/Card.js";
 // Custom components
 import BarChart from "components/charts/BarChart";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   barChartDataConsumption,
   barChartOptionsConsumption,
@@ -20,6 +20,10 @@ import { MdBarChart } from "react-icons/md";
 export default function WeeklyRevenue(props) {
   const { bar,
         ...rest } = props;
+      const [barData, setBarData] = useState(bar);
+  useEffect(() => {
+    setBarData(bar);
+  }, [bar]);
   console.log('bar')
   console.log(barChartDataConsumption)
   console.log(bar)

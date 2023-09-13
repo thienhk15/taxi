@@ -16,6 +16,15 @@ class ColumnChart extends Component {
       chartOptions: this.props.chartOptions,
     });
   }
+  componentDidUpdate(prevProps) {
+    // Kiểm tra xem props.chartData có thay đổi so với lần render trước đó không
+    if (prevProps.chartData !== this.props.chartData) {
+      // Nếu có sự thay đổi, cập nhật state chartData
+      this.setState({
+        chartData: this.props.chartData,
+      });
+    }
+  }
 
   render() {
     return (
